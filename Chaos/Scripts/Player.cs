@@ -17,6 +17,10 @@ public class Player : Node2D
     [Export] private NodePath _arenaMaxNode;
     private RichTextLabel _richTextLabelScore;
     [Export] private NodePath _richTextLabelScorePath;
+
+    private RichTextLabel _richTextLabelBestScore;
+    [Export] private NodePath _richTextLabelBestScorePath;
+
     [Export] private NodePath _skinPath;
     private AnimatedSprite _skin;
 
@@ -46,8 +50,12 @@ public class Player : Node2D
         _arenaMin = (GetNode(_arenaMinNode) as Node2D).GlobalPosition;
         _arenaMax = (GetNode(_arenaMaxNode) as Node2D).GlobalPosition;
         _richTextLabelScore = (RichTextLabel)GetNode(_richTextLabelScorePath);
+        _richTextLabelBestScore = (RichTextLabel)GetNode(_richTextLabelBestScorePath);
+
         _hearthAnimationPlayer = (AnimationPlayer)GetNode(_hearthAnimationPlayerPath);
         _bubbleAnimationPlayer = (AnimationPlayer)GetNode(_bubbleAnimationPlayerPath);
+
+
 
         _skin = (AnimatedSprite)GetNode(_skinPath);
         Singleton = this;
@@ -61,6 +69,7 @@ public class Player : Node2D
     }
 
     float timer = 0;
+    float bestTimer = 0;
     bool started = false;
     // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(float delta)
@@ -171,6 +180,21 @@ public class Player : Node2D
     }
 
     public void Die () {
+        if (timer > bestTimer) bestTimer = timer;
+        
+        string minutes = "" + ((int)bestTimer / 60);
+        string seconds = "" + ((int)bestTimer % 60);
+        
+        if (minutes.Length != 2) {
+            minutes = "0" + minutes;
+        }
+
+        if (seconds.Length != 2) {
+            seconds = "0" + seconds;
+        }
+
+        _richTextLabelBestScore.BbcodeText =  "[right]best : " + minutes + ":" + seconds;
+
         BulletSpawner.Singleton.Stop();
         Alive = false;
     }

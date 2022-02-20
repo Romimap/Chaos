@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/bulles.wav-9dec4ed8d9b865641f7c3877147e9cb8.sample"
+
+[deps]
+
+source_file="res://musiques/bulles.wav"
+dest_files=[ "res://.import/bulles.wav-9dec4ed8d9b865641f7c3877147e9cb8.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

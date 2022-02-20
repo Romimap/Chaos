@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=2]
+[gd_scene load_steps=38 format=2]
 
 [ext_resource path="res://Scripts/Player.cs" type="Script" id=1]
 [ext_resource path="res://sprite/bubbles.png" type="Texture" id=2]
@@ -8,56 +8,62 @@
 [ext_resource path="res://sprite/tileset.tres" type="TileSet" id=6]
 [ext_resource path="res://Scripts/PressKeyStart.cs" type="Script" id=7]
 [ext_resource path="res://sprite/player.png" type="Texture" id=8]
+[ext_resource path="res://musiques/bulles.wav" type="AudioStream" id=9]
+[ext_resource path="res://musiques/dead2.wav" type="AudioStream" id=10]
+[ext_resource path="res://musiques/hitHurt.wav" type="AudioStream" id=11]
+[ext_resource path="res://musiques/Cyborg Ninja.mp3" type="AudioStream" id=12]
+[ext_resource path="res://Scripts/AudioManager.cs" type="Script" id=13]
+[ext_resource path="res://sprite/keys.png" type="Texture" id=14]
 
-[sub_resource type="AtlasTexture" id=2]
+[sub_resource type="AtlasTexture" id=1]
 atlas = ExtResource( 4 )
 region = Rect2( 55.9026, 73.9599, 13.9668, 11.0264 )
 
-[sub_resource type="AtlasTexture" id=3]
+[sub_resource type="AtlasTexture" id=2]
 atlas = ExtResource( 8 )
 region = Rect2( 32, 32, 32, 32 )
 
-[sub_resource type="AtlasTexture" id=4]
+[sub_resource type="AtlasTexture" id=3]
 atlas = ExtResource( 8 )
 region = Rect2( 32, 0, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=4]
+atlas = ExtResource( 8 )
+region = Rect2( 0, 32, 32, 32 )
 
 [sub_resource type="AtlasTexture" id=5]
 atlas = ExtResource( 8 )
-region = Rect2( 0, 32, 32, 32 )
-
-[sub_resource type="AtlasTexture" id=6]
-atlas = ExtResource( 8 )
 region = Rect2( 0, 0, 32, 32 )
 
-[sub_resource type="SpriteFrames" id=7]
+[sub_resource type="SpriteFrames" id=6]
 animations = [ {
-"frames": [ SubResource( 3 ), SubResource( 4 ), SubResource( 5 ), SubResource( 6 ) ],
+"frames": [ SubResource( 2 ), SubResource( 3 ), SubResource( 4 ), SubResource( 5 ) ],
 "loop": false,
 "name": "default",
 "speed": 0.0
 } ]
 
-[sub_resource type="AtlasTexture" id=18]
+[sub_resource type="AtlasTexture" id=7]
 atlas = ExtResource( 2 )
 region = Rect2( 0, 0, 32, 32 )
 
-[sub_resource type="AtlasTexture" id=19]
+[sub_resource type="AtlasTexture" id=8]
 atlas = ExtResource( 2 )
 region = Rect2( 32, 0, 32, 32 )
 
-[sub_resource type="AtlasTexture" id=20]
+[sub_resource type="AtlasTexture" id=9]
 atlas = ExtResource( 2 )
 region = Rect2( 0, 32, 32, 32 )
 
-[sub_resource type="SpriteFrames" id=21]
+[sub_resource type="SpriteFrames" id=10]
 animations = [ {
-"frames": [ SubResource( 18 ), SubResource( 19 ), SubResource( 20 ) ],
+"frames": [ SubResource( 7 ), SubResource( 8 ), SubResource( 9 ) ],
 "loop": false,
 "name": "default",
 "speed": 0.0
 } ]
 
-[sub_resource type="Animation" id=22]
+[sub_resource type="Animation" id=11]
 resource_name = "OMG"
 length = 2.0
 tracks/0/type = "value"
@@ -102,9 +108,20 @@ tracks/3/keys = {
 "points": PoolRealArray( 0, -0.25, 0, 0.25, 0, 1, -0.25, 0, 0.25, 0, 1, -0.25, 0, 0.25, 0, 0, -0.25, 0, 0.25, 0 ),
 "times": PoolRealArray( 0, 0.4, 1, 1.4 )
 }
+tracks/4/type = "value"
+tracks/4/path = NodePath("../BubbleSound:playing")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ true ]
+}
 
-[sub_resource type="Animation" id=23]
-resource_name = "OUCH"
+[sub_resource type="Animation" id=12]
 length = 2.0
 tracks/0/type = "value"
 tracks/0/path = NodePath(".:frame")
@@ -148,9 +165,20 @@ tracks/3/keys = {
 "points": PoolRealArray( 0, -0.25, 0, 0.25, 0, 1, -0.25, 0, 0.25, 0, 1, -0.25, 0, 0.25, 0, 0, -0.25, 0, 0.25, 0 ),
 "times": PoolRealArray( 0, 0.4, 1, 1.4 )
 }
+tracks/4/type = "value"
+tracks/4/path = NodePath("../Hit:playing")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ true ]
+}
 
-[sub_resource type="Animation" id=24]
-resource_name = "RIP"
+[sub_resource type="Animation" id=13]
 length = 2.0
 tracks/0/type = "value"
 tracks/0/path = NodePath(".:frame")
@@ -194,8 +222,20 @@ tracks/3/keys = {
 "points": PoolRealArray( 0, -0.25, 0, 0.25, 0, 1, -0.25, 0, 0.25, 0, 1, -0.25, 0, 0.25, 0, 0, -0.25, 0, 0.25, 0 ),
 "times": PoolRealArray( 0, 0.4, 1, 1.4 )
 }
+tracks/4/type = "value"
+tracks/4/path = NodePath("../Death:playing")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ true ]
+}
 
-[sub_resource type="Animation" id=8]
+[sub_resource type="Animation" id=14]
 length = 3.0
 tracks/0/type = "method"
 tracks/0/path = NodePath(".")
@@ -224,7 +264,7 @@ tracks/1/keys = {
 "values": [ Color( 1, 1, 1, 0 ), Color( 0.286275, 0.301961, 0.494118, 1 ), Color( 0.776471, 0.623529, 0.647059, 1 ), Color( 0.984314, 0.960784, 0.937255, 1 ), Color( 0.984314, 0.960784, 0.937255, 1 ), Color( 0.776471, 0.623529, 0.647059, 1 ), Color( 0.286275, 0.301961, 0.494118, 1 ), Color( 1, 1, 1, 0 ) ]
 }
 
-[sub_resource type="Animation" id=9]
+[sub_resource type="Animation" id=15]
 length = 4.0
 tracks/0/type = "value"
 tracks/0/path = NodePath("../Control/Level:modulate")
@@ -276,8 +316,22 @@ tracks/3/keys = {
 "update": 0,
 "values": [ Color( 2.00392, 2.00392, 2.00392, 1 ), Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
 }
+tracks/4/type = "method"
+tracks/4/path = NodePath("../AudioManager")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "FadeOut"
+} ]
+}
 
-[sub_resource type="Animation" id=10]
+[sub_resource type="Animation" id=16]
 resource_name = "Hit"
 tracks/0/type = "value"
 tracks/0/path = NodePath("../Player/Skin:modulate")
@@ -292,7 +346,7 @@ tracks/0/keys = {
 "values": [ Color( 2, 2, 2, 1 ), Color( 1, 1, 1, 1 ) ]
 }
 
-[sub_resource type="Animation" id=11]
+[sub_resource type="Animation" id=17]
 length = 3.0
 tracks/0/type = "method"
 tracks/0/path = NodePath(".")
@@ -332,8 +386,22 @@ tracks/2/keys = {
 "update": 0,
 "values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ) ]
 }
+tracks/3/type = "method"
+tracks/3/path = NodePath("../AudioManager")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0.1 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "FadeIn"
+} ]
+}
 
-[sub_resource type="Animation" id=17]
+[sub_resource type="Animation" id=18]
 resource_name = "Blink"
 length = 2.0
 loop = true
@@ -350,11 +418,11 @@ tracks/0/keys = {
 "values": [ true, false ]
 }
 
-[sub_resource type="AtlasTexture" id=12]
+[sub_resource type="AtlasTexture" id=19]
 atlas = ExtResource( 4 )
 region = Rect2( 32, 162, 15, 15 )
 
-[sub_resource type="Animation" id=13]
+[sub_resource type="Animation" id=20]
 resource_name = "Hearth0"
 length = 2.0
 tracks/0/type = "value"
@@ -394,7 +462,7 @@ tracks/2/keys = {
 "values": [ Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
 }
 
-[sub_resource type="Animation" id=14]
+[sub_resource type="Animation" id=21]
 length = 2.0
 tracks/0/type = "value"
 tracks/0/path = NodePath("TextureRect:modulate")
@@ -433,7 +501,7 @@ tracks/2/keys = {
 "values": [ Color( 1, 1, 1, 1 ) ]
 }
 
-[sub_resource type="Animation" id=15]
+[sub_resource type="Animation" id=22]
 length = 2.0
 tracks/0/type = "value"
 tracks/0/path = NodePath("TextureRect:modulate")
@@ -472,7 +540,7 @@ tracks/2/keys = {
 "values": [ Color( 1, 1, 1, 1 ) ]
 }
 
-[sub_resource type="Animation" id=16]
+[sub_resource type="Animation" id=23]
 length = 2.0
 tracks/0/type = "value"
 tracks/0/path = NodePath("TextureRect:modulate")
@@ -516,7 +584,7 @@ tracks/2/keys = {
 [node name="Sprite" type="Sprite" parent="."]
 position = Vector2( 161.273, 122.472 )
 scale = Vector2( 53.441, 23.2676 )
-texture = SubResource( 2 )
+texture = SubResource( 1 )
 
 [node name="TileMap" type="TileMap" parent="."]
 position = Vector2( 0, -4 )
@@ -533,23 +601,42 @@ _acceleration = 0.2
 _arenaMinNode = NodePath("../ArenaBounds/ArenaMin")
 _arenaMaxNode = NodePath("../ArenaBounds/ArenaMax")
 _richTextLabelScorePath = NodePath("../Control/Score")
+_richTextLabelBestScorePath = NodePath("../Control/Best")
 _skinPath = NodePath("Skin")
 _hearthAnimationPlayerPath = NodePath("../Control/AnimationPlayer")
 _bubbleAnimationPlayerPath = NodePath("Bubble/AnimationPlayer")
 
 [node name="Skin" type="AnimatedSprite" parent="Player"]
 modulate = Color( 1, 1, 1, 0 )
-frames = SubResource( 7 )
+frames = SubResource( 6 )
 
 [node name="Bubble" type="AnimatedSprite" parent="Player"]
 position = Vector2( 18, -19 )
 scale = Vector2( 1e-05, 1e-05 )
-frames = SubResource( 21 )
+frames = SubResource( 10 )
+frame = 1
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Player/Bubble"]
-anims/OMG = SubResource( 22 )
-anims/OUCH = SubResource( 23 )
-anims/RIP = SubResource( 24 )
+anims/OMG = SubResource( 11 )
+anims/OUCH = SubResource( 12 )
+anims/RIP = SubResource( 13 )
+
+[node name="Music" type="AudioStreamPlayer" parent="Player"]
+stream = ExtResource( 12 )
+autoplay = true
+bus = "Music"
+
+[node name="Hit" type="AudioStreamPlayer" parent="Player"]
+stream = ExtResource( 11 )
+bus = "Effects"
+
+[node name="Death" type="AudioStreamPlayer" parent="Player"]
+stream = ExtResource( 10 )
+bus = "Effects"
+
+[node name="BubbleSound" type="AudioStreamPlayer" parent="Player"]
+stream = ExtResource( 9 )
+bus = "Effects"
 
 [node name="ArenaBounds" type="Node2D" parent="."]
 
@@ -567,10 +654,10 @@ _animationPlayerNode = NodePath("AnimationPlayer")
 _levelRTL = NodePath("../Control/Level")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="BulletSpawner"]
-anims/EndLevelAnimation = SubResource( 8 )
-anims/GameOverAnimation = SubResource( 9 )
-anims/Hit = SubResource( 10 )
-anims/StartGameAnimation = SubResource( 11 )
+anims/EndLevelAnimation = SubResource( 14 )
+anims/GameOverAnimation = SubResource( 15 )
+anims/Hit = SubResource( 16 )
+anims/StartGameAnimation = SubResource( 17 )
 
 [node name="Control" type="Control" parent="."]
 margin_right = 320.0
@@ -601,20 +688,33 @@ __meta__ = {
 modulate = Color( 0.984314, 0.960784, 0.937255, 1 )
 anchor_left = 0.5
 anchor_right = 0.5
-margin_left = -75.0
+margin_left = -155.0
 margin_top = 6.0
-margin_right = 75.0
+margin_right = 154.0
 margin_bottom = 46.0
 custom_fonts/normal_font = ExtResource( 5 )
 bbcode_enabled = true
-bbcode_text = "[center]00:00"
-text = "00:00"
+bbcode_text = "[center][color=#494d7e]If it does not work, click on the game !"
+text = "If it does not work, click on the game !"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Best" type="RichTextLabel" parent="Control"]
+modulate = Color( 0.984314, 0.960784, 0.937255, 1 )
+anchor_left = 0.5
+anchor_right = 0.5
+margin_left = 4.0
+margin_top = 6.0
+margin_right = 154.0
+margin_bottom = 46.0
+custom_fonts/normal_font = ExtResource( 5 )
+bbcode_enabled = true
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="Press any key" type="RichTextLabel" parent="Control"]
-visible = false
 modulate = Color( 0.984314, 0.960784, 0.937255, 1 )
 anchor_left = 0.5
 anchor_top = 0.5
@@ -624,6 +724,7 @@ margin_left = -75.0
 margin_top = 45.0
 margin_right = 75.0
 margin_bottom = 85.0
+rect_clip_content = false
 custom_fonts/normal_font = ExtResource( 5 )
 bbcode_enabled = true
 bbcode_text = "[center]Press any key to start"
@@ -634,7 +735,11 @@ __meta__ = {
 }
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Control/Press any key"]
-anims/Blink = SubResource( 17 )
+anims/Blink = SubResource( 18 )
+
+[node name="keys" type="Sprite" parent="Control/Press any key"]
+position = Vector2( 74, -25 )
+texture = ExtResource( 14 )
 
 [node name="TextureRect" type="TextureRect" parent="Control"]
 modulate = Color( 1, 1, 1, 0 )
@@ -642,7 +747,7 @@ margin_left = 12.0
 margin_top = 115.0
 margin_right = 28.0
 margin_bottom = 131.0
-texture = SubResource( 12 )
+texture = SubResource( 19 )
 
 [node name="TextureRect2" type="TextureRect" parent="Control"]
 modulate = Color( 1, 1, 1, 0 )
@@ -650,7 +755,7 @@ margin_left = 25.0
 margin_top = 115.0
 margin_right = 41.0
 margin_bottom = 131.0
-texture = SubResource( 12 )
+texture = SubResource( 19 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -661,18 +766,21 @@ margin_left = 38.0
 margin_top = 115.0
 margin_right = 54.0
 margin_bottom = 131.0
-texture = SubResource( 12 )
+texture = SubResource( 19 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="Control"]
-anims/Hearth0 = SubResource( 13 )
-anims/Hearth1 = SubResource( 14 )
-anims/Hearth2 = SubResource( 15 )
-anims/Hearth3 = SubResource( 16 )
+anims/Hearth0 = SubResource( 20 )
+anims/Hearth1 = SubResource( 21 )
+anims/Hearth2 = SubResource( 22 )
+anims/Hearth3 = SubResource( 23 )
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2( 159, 120 )
 z_index = -10
 current = true
+
+[node name="AudioManager" type="Node" parent="."]
+script = ExtResource( 13 )

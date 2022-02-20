@@ -4,7 +4,9 @@ using System;
 public class BulletSpawner : Node
 {
     private Random _rng = new Random();
-    [Export] private PackedScene _bulletScene = (PackedScene)ResourceLoader.Load("res://Scenes/Bullet.tscn");
+    private PackedScene _bulletScene = (PackedScene)ResourceLoader.Load("res://Scenes/Bullet.tscn");
+    private PackedScene _laserScene = (PackedScene)ResourceLoader.Load("res://Scenes/Laser.tscn");
+    private PackedScene _usedBulletScene;
     private Vector2 _arenaMin = new Vector2();
     private Vector2 _arenaMax = new Vector2();
     [Export] private NodePath _arenaMinNode;
@@ -27,7 +29,7 @@ public class BulletSpawner : Node
 
     float timer = 1;
     float timerValue = 3;
-    float levelTimer = 30;
+    float levelTimer = 20;
     bool stop = true;
     int level = 1;
     // Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -45,6 +47,13 @@ public class BulletSpawner : Node
 
         } else if (timer < 0) {
             timer = timerValue;
+
+            if (_rng.NextDouble() > 2f / (float)level) {
+                _usedBulletScene = _laserScene;
+            } else {
+                _usedBulletScene = _bulletScene;
+            }
+
             switch(_rng.Next(0, 3)) {
                 case 0:
                     RadialSpawn();
@@ -62,7 +71,7 @@ public class BulletSpawner : Node
     public void Init () {
         timer = 1;
         timerValue = 3;
-        levelTimer = 30;
+        levelTimer = 20;
         stop = true;
         level = 1;
         _levelRichTextLabel.BbcodeText = "[center]Level " + level;
@@ -72,7 +81,7 @@ public class BulletSpawner : Node
     }
 
     public void StartLevel () {
-        levelTimer = 30;
+        levelTimer = 20;
         timerValue *= 0.66f;
         timer = 0.5f;
         stop = false;
@@ -91,7 +100,7 @@ public class BulletSpawner : Node
     }
 
     private void RadialSpawn() {
-        int bullets = 4 + _rng.Next(0, 4);
+        int bullets = 3 + _rng.Next(0, 4);
         float globalOffsetAngle = (float)_rng.NextDouble()* Mathf.Pi * 2;
         float offsetAngle = 0;
         if (_rng.Next(0, 3) != 0) { //1 out of 3 will have 0 offset angle
@@ -101,7 +110,7 @@ public class BulletSpawner : Node
         float hipo = Mathf.Sqrt(Mathf.Pow(_arenaMax.x - _arenaMin.x, 2) + Mathf.Pow(_arenaMax.y - _arenaMin.y, 2)) / 2;
         Vector2 arenaMid = (_arenaMin + _arenaMax) / 2;
         for (int i = 0; i < bullets; i++) {
-            Bullet bullet = (Bullet)_bulletScene.Instance();
+            Bullet bullet = (Bullet)_usedBulletScene.Instance();
             float angle = (float)i / (float)bullets * Mathf.Pi * 2;
             angle += globalOffsetAngle;
             Vector2 direction = new Vector2(Mathf.Sin(angle), Mathf.Cos(angle));
@@ -119,7 +128,7 @@ public class BulletSpawner : Node
         if (wall == 0) { //L or R
             int bullets = 2 + _rng.Next(0, 2);
             for (int i = 0; i < bullets; i++) {
-                Bullet bullet = (Bullet)_bulletScene.Instance();
+                Bullet bullet = (Bullet)_usedBulletScene.Instance();
                 bullet._direction = new Vector2(-1, 0);
                 float t = (float)(i + 1) / (float)(bullets + 1);
                 float y = _arenaMin.y * t + _arenaMax.y * (1 - t);
@@ -130,7 +139,7 @@ public class BulletSpawner : Node
         } else if (wall == 1) {
             int bullets = 2 + _rng.Next(0, 2);
             for (int i = 0; i < bullets; i++) {
-                Bullet bullet = (Bullet)_bulletScene.Instance();
+                Bullet bullet = (Bullet)_usedBulletScene.Instance();
                 bullet._direction = new Vector2(1, 0);
                 float t = (float)(i + 1) / (float)(bullets + 1);
                 float y = _arenaMin.y * t + _arenaMax.y * (1 - t);
@@ -141,7 +150,7 @@ public class BulletSpawner : Node
         } else if (wall == 2) {
             int bullets = 3 + _rng.Next(0, 3);
             for (int i = 0; i < bullets; i++) {
-                Bullet bullet = (Bullet)_bulletScene.Instance();
+                Bullet bullet = (Bullet)_usedBulletScene.Instance();
                 bullet._direction = new Vector2(0, 1);
                 float t = (float)(i + 1) / (float)(bullets + 1);
                 float x = _arenaMin.x * t + _arenaMax.x * (1 - t);
@@ -152,7 +161,7 @@ public class BulletSpawner : Node
         } else {
             int bullets = 3 + _rng.Next(0, 3);
             for (int i = 0; i < bullets; i++) {
-                Bullet bullet = (Bullet)_bulletScene.Instance();
+                Bullet bullet = (Bullet)_usedBulletScene.Instance();
                 bullet._direction = new Vector2(0, -1);
                 float t = (float)(i + 1) / (float)(bullets + 1);
                 float x = _arenaMin.x * t + _arenaMax.x * (1 - t);
@@ -166,28 +175,28 @@ public class BulletSpawner : Node
     private void CornerSpawn() {
         int bullets = 1 + _rng.Next(0, 2);
         for (int i = 0; i < bullets; i++) {
-            Bullet bullet = (Bullet)_bulletScene.Instance();
+            Bullet bullet = (Bullet)_usedBulletScene.Instance();
             float angle = .0f * Mathf.Pi + ((Mathf.Pi / 2) / (bullets + 1) * (i + 1));
             bullet._direction = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
             bullet.GlobalPosition = new Vector2(_arenaMin.x, _arenaMin.y);
             AddChild(bullet);
         }
         for (int i = 0; i < bullets; i++) {
-            Bullet bullet = (Bullet)_bulletScene.Instance();
+            Bullet bullet = (Bullet)_usedBulletScene.Instance();
             float angle = .5f * Mathf.Pi + ((Mathf.Pi / 2) / (bullets + 1) * (i + 1));
             bullet._direction = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
             bullet.GlobalPosition = new Vector2(_arenaMax.x, _arenaMin.y);
             AddChild(bullet);
         }
         for (int i = 0; i < bullets; i++) {
-            Bullet bullet = (Bullet)_bulletScene.Instance();
+            Bullet bullet = (Bullet)_usedBulletScene.Instance();
             float angle = 1f * Mathf.Pi + ((Mathf.Pi / 2) / (bullets + 1) * (i + 1));
             bullet._direction = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
             bullet.GlobalPosition = new Vector2(_arenaMax.x, _arenaMax.y);
             AddChild(bullet);
         }
         for (int i = 0; i < bullets; i++) {
-            Bullet bullet = (Bullet)_bulletScene.Instance();
+            Bullet bullet = (Bullet)_usedBulletScene.Instance();
             float angle = 1.5f * Mathf.Pi + ((Mathf.Pi / 2) / (bullets + 1) * (i + 1));
             bullet._direction = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
             bullet.GlobalPosition = new Vector2(_arenaMin.x, _arenaMax.y);
