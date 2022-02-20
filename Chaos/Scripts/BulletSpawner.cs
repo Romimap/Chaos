@@ -9,6 +9,8 @@ public class BulletSpawner : Node
     private Vector2 _arenaMax = new Vector2();
     [Export] private NodePath _arenaMinNode;
     [Export] private NodePath _arenaMaxNode;
+    private AnimationPlayer _animationPlayer;
+    [Export] private NodePath _animationPlayerNode;
     // Declare member variables here. Examples:
     // private int a = 2;
     // private string b = "text";
@@ -17,21 +19,26 @@ public class BulletSpawner : Node
     public override void _Ready() {
         _arenaMin = (GetNode(_arenaMinNode) as Node2D).GlobalPosition;
         _arenaMax = (GetNode(_arenaMaxNode) as Node2D).GlobalPosition;
+        _animationPlayer = (AnimationPlayer)GetNode(_animationPlayerNode);
     }
 
     float timer = 1;
     float timerValue = 4;
-    float levelTimer = -1;
+    float levelTimer = 30;
+    bool stop = false;
     // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(float delta)
     {
+        if (stop) return;
+
         timer -= delta;
         levelTimer -= delta;
         if (levelTimer < 0) {
-            
+            _animationPlayer.Play("EndLevelAnimation");
+            stop = true;
         } else if (timer < 0) {
             timer = timerValue;
-            switch(_rng.Next()) {
+            switch(_rng.Next(0, 3)) {
                 case 0:
                     RadialSpawn();
                     break;
@@ -49,6 +56,7 @@ public class BulletSpawner : Node
         levelTimer = 30;
         timerValue *= 0.95f;
         timer = timerValue;
+        stop = false;
     }
 
     private void RadialSpawn() {
