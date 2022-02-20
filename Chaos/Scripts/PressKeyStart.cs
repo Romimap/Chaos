@@ -10,6 +10,8 @@ public class PressKeyStart : RichTextLabel {
     public override void _Ready()
     {
         Singleton = this;
+        Visible = true;
+        (GetNode("./AnimationPlayer") as AnimationPlayer).Play("Blink");
     }
 
     // Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -19,6 +21,7 @@ public class PressKeyStart : RichTextLabel {
     }
 
     public void Start () {
+        (GetNode("./AnimationPlayer") as AnimationPlayer).Stop();
         Visible = false;
         listen = false;
         Player.Singleton.StartGame();
@@ -27,6 +30,7 @@ public class PressKeyStart : RichTextLabel {
     public void End () {
         Visible = true;
         listen = true;
+        (GetNode("./AnimationPlayer") as AnimationPlayer).Play("Blink");
     }
 
     public override void _Input(InputEvent @event)

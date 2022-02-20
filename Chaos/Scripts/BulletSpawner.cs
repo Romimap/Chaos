@@ -41,6 +41,8 @@ public class BulletSpawner : Node
             _animationPlayer.Play("EndLevelAnimation");
             _levelRichTextLabel.BbcodeText = "[center]Level " + level;
             stop = true;
+            Player.Singleton._bubbleAnimationPlayer.Play("OMG");
+
         } else if (timer < 0) {
             timer = timerValue;
             switch(_rng.Next(0, 3)) {
@@ -65,19 +67,27 @@ public class BulletSpawner : Node
         level = 1;
         _levelRichTextLabel.BbcodeText = "[center]Level " + level;
         _animationPlayer.Play("StartGameAnimation");
+        Player.Singleton._bubbleAnimationPlayer.Play("OMG");
+
     }
 
     public void StartLevel () {
         levelTimer = 30;
-        timerValue *= 0.85f;
-        timer = timerValue;
+        timerValue *= 0.66f;
+        timer = 0.5f;
         stop = false;
         level++;
+
     }
 
     public void Stop () {
         stop = true;
         _animationPlayer.Play("GameOverAnimation");
+    }
+
+    public void Hit () {
+        if (_animationPlayer.IsPlaying()) return;
+        _animationPlayer.Play("Hit");
     }
 
     private void RadialSpawn() {

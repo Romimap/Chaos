@@ -20,6 +20,12 @@ public class Player : Node2D
     [Export] private NodePath _skinPath;
     private AnimatedSprite _skin;
 
+    [Export] private NodePath _hearthAnimationPlayerPath;
+    private AnimationPlayer _hearthAnimationPlayer;
+
+    [Export] private NodePath _bubbleAnimationPlayerPath;
+    public AnimationPlayer _bubbleAnimationPlayer;
+
     private float HPTimer = 0;
     private int HP = 3;
             int anim = 0;
@@ -40,6 +46,9 @@ public class Player : Node2D
         _arenaMin = (GetNode(_arenaMinNode) as Node2D).GlobalPosition;
         _arenaMax = (GetNode(_arenaMaxNode) as Node2D).GlobalPosition;
         _richTextLabelScore = (RichTextLabel)GetNode(_richTextLabelScorePath);
+        _hearthAnimationPlayer = (AnimationPlayer)GetNode(_hearthAnimationPlayerPath);
+        _bubbleAnimationPlayer = (AnimationPlayer)GetNode(_bubbleAnimationPlayerPath);
+
         _skin = (AnimatedSprite)GetNode(_skinPath);
         Singleton = this;
     }
@@ -48,6 +57,7 @@ public class Player : Node2D
         BulletSpawner.Singleton.Init();
         Alive = true;
         HP = 3;
+        _hearthAnimationPlayer.Play("Hearth3");        
     }
 
     float timer = 0;
@@ -79,13 +89,24 @@ public class Player : Node2D
 
         _desiredVelocity = desiredDirection * _speed;
 
-        int minutes = (int)timer / 60;
-        int seconds = (int)timer % 60;
+        string minutes = "" + ((int)timer / 60);
+        string seconds = "" + ((int)timer % 60);
+        
+        if (minutes.Length != 2) {
+            minutes = "0" + minutes;
+        }
+
+        if (seconds.Length != 2) {
+            seconds = "0" + seconds;
+        }
 
         _richTextLabelScore.BbcodeText =  "[center]" + minutes + ":" + seconds;
 
         float currentSpeed = _velocity.Length() / _speed;
-        _skin.Scale = new Vector2(1, (Mathf.Cos(timer * 20) * 0.1f) * currentSpeed + 1);
+        float runAnim = (Mathf.Cos(timer * 20) * 0.1f) + 1;
+        float idleAnim = (Mathf.Cos(timer * 10) * 0.1f) * (0.3f) + 1;
+        float anim = runAnim * currentSpeed + idleAnim * (1 - currentSpeed);
+        _skin.Scale = new Vector2(1, anim);
 
     }
 
@@ -94,19 +115,19 @@ public class Player : Node2D
 
         _velocity = _velocity * (1f - _acceleration) + _desiredVelocity * _acceleration;
         GlobalPosition += _velocity * delta;
-        if (GlobalPosition.x < _arenaMin.x) {
-            GlobalPosition = new Vector2(_arenaMin.x, GlobalPosition.y);
+        if (GlobalPosition.x < _arenaMin.x + 9) {
+            GlobalPosition = new Vector2(_arenaMin.x + 9, GlobalPosition.y);
             if (_velocity.x < 0) _velocity.x = 0;
-        } else if (GlobalPosition.x > _arenaMax.x) {
-            GlobalPosition = new Vector2(_arenaMax.x, GlobalPosition.y);
+        } else if (GlobalPosition.x > _arenaMax.x - 9) {
+            GlobalPosition = new Vector2(_arenaMax.x - 9, GlobalPosition.y);
             if (_velocity.x > 0) _velocity.x = 0;
         }
 
         if (GlobalPosition.y < _arenaMin.y) {
             GlobalPosition = new Vector2(GlobalPosition.x, _arenaMin.y);
             if (_velocity.y < 0) _velocity.y = 0;
-        } else if (GlobalPosition.y > _arenaMax.y) {
-            GlobalPosition = new Vector2(GlobalPosition.x, _arenaMax.y);
+        } else if (GlobalPosition.y > _arenaMax.y - 9) {
+            GlobalPosition = new Vector2(GlobalPosition.x, _arenaMax.y - 9);
             if (_velocity.y > 0) _velocity.y = 0;
         }
 
@@ -128,8 +149,22 @@ public class Player : Node2D
 
     public void Hit () {
         HP--;
-        if (HP <= 0) {
+        if (HP == 0) {
             Die();
+            _bubbleAnimationPlayer.Play("RIP");
+        } else if (HP > 0) {
+            _bubbleAnimationPlayer.Play("OUCH");
+            BulletSpawner.Singleton.Hit();
+        }
+
+        if (HP == 2) {
+            _hearthAnimationPlayer.Play("Hearth2");        
+        }
+        if (HP == 1) {
+            _hearthAnimationPlayer.Play("Hearth1");        
+        }
+        if (HP == 0) {
+            _hearthAnimationPlayer.Play("Hearth0");        
         }
 
         HPTimer = 0.5f;
