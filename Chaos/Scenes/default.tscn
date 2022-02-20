@@ -1,0 +1,41 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://Scripts/Player.cs" type="Script" id=1]
+[ext_resource path="res://icon.png" type="Texture" id=2]
+[ext_resource path="res://Scripts/BulletSpawner.cs" type="Script" id=3]
+[ext_resource path="res://Scenes/Bullet.tscn" type="PackedScene" id=4]
+
+[sub_resource type="Animation" id=1]
+resource_name = "EndLevelAnimation"
+
+[node name="Root" type="Node"]
+
+[node name="Player" type="Node2D" parent="."]
+position = Vector2( 160, 120 )
+script = ExtResource( 1 )
+_speed = 140.0
+_acceleration = 0.2
+_arenaMinNode = NodePath("../ArenaBounds/ArenaMin")
+_arenaMaxNode = NodePath("../ArenaBounds/ArenaMax")
+
+[node name="icon" type="Sprite" parent="Player"]
+scale = Vector2( 0.2, 0.2 )
+texture = ExtResource( 2 )
+
+[node name="ArenaBounds" type="Node2D" parent="."]
+
+[node name="ArenaMin" type="Node2D" parent="ArenaBounds"]
+position = Vector2( 50, 50 )
+
+[node name="ArenaMax" type="Node2D" parent="ArenaBounds"]
+position = Vector2( 270, 190 )
+
+[node name="Bullet" parent="." instance=ExtResource( 4 )]
+
+[node name="BulletSpawner" type="Node2D" parent="."]
+script = ExtResource( 3 )
+_arenaMinNode = NodePath("../ArenaBounds/ArenaMin")
+_arenaMaxNode = NodePath("../ArenaBounds/ArenaMax")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="BulletSpawner"]
+anims/EndLevelAnimation = SubResource( 1 )
