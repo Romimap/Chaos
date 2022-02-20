@@ -11,21 +11,25 @@ public class BulletSpawner : Node
     [Export] private NodePath _arenaMaxNode;
     private AnimationPlayer _animationPlayer;
     [Export] private NodePath _animationPlayerNode;
-    // Declare member variables here. Examples:
-    // private int a = 2;
-    // private string b = "text";
+    [Export] private NodePath _levelRTL;
+    private RichTextLabel _levelRichTextLabel;
+
+    public static BulletSpawner Singleton;
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready() {
         _arenaMin = (GetNode(_arenaMinNode) as Node2D).GlobalPosition;
         _arenaMax = (GetNode(_arenaMaxNode) as Node2D).GlobalPosition;
         _animationPlayer = (AnimationPlayer)GetNode(_animationPlayerNode);
+        _levelRichTextLabel = (RichTextLabel)GetNode(_levelRTL);
+        Singleton = this;
     }
 
     float timer = 1;
-    float timerValue = 4;
+    float timerValue = 3;
     float levelTimer = 30;
-    bool stop = false;
+    bool stop = true;
+    int level = 1;
     // Called every frame. 'delta' is the elapsed time since the previous frame.
     public override void _Process(float delta)
     {
@@ -35,6 +39,7 @@ public class BulletSpawner : Node
         levelTimer -= delta;
         if (levelTimer < 0) {
             _animationPlayer.Play("EndLevelAnimation");
+            _levelRichTextLabel.BbcodeText = "[center]Level " + level;
             stop = true;
         } else if (timer < 0) {
             timer = timerValue;
@@ -52,11 +57,27 @@ public class BulletSpawner : Node
         }
     }
 
+    public void Init () {
+        timer = 1;
+        timerValue = 3;
+        levelTimer = 30;
+        stop = true;
+        level = 1;
+        _levelRichTextLabel.BbcodeText = "[center]Level " + level;
+        _animationPlayer.Play("StartGameAnimation");
+    }
+
     public void StartLevel () {
         levelTimer = 30;
-        timerValue *= 0.95f;
+        timerValue *= 0.85f;
         timer = timerValue;
         stop = false;
+        level++;
+    }
+
+    public void Stop () {
+        stop = true;
+        _animationPlayer.Play("GameOverAnimation");
     }
 
     private void RadialSpawn() {
@@ -86,7 +107,7 @@ public class BulletSpawner : Node
     private void WallSpawn() {
         int wall = _rng.Next(0, 4);
         if (wall == 0) { //L or R
-            int bullets = 2 + _rng.Next(0, 3);
+            int bullets = 2 + _rng.Next(0, 2);
             for (int i = 0; i < bullets; i++) {
                 Bullet bullet = (Bullet)_bulletScene.Instance();
                 bullet._direction = new Vector2(-1, 0);
@@ -97,7 +118,7 @@ public class BulletSpawner : Node
                 AddChild(bullet);
             }
         } else if (wall == 1) {
-            int bullets = 2 + _rng.Next(0, 3);
+            int bullets = 2 + _rng.Next(0, 2);
             for (int i = 0; i < bullets; i++) {
                 Bullet bullet = (Bullet)_bulletScene.Instance();
                 bullet._direction = new Vector2(1, 0);
@@ -108,7 +129,7 @@ public class BulletSpawner : Node
                 AddChild(bullet);
             }
         } else if (wall == 2) {
-            int bullets = 3 + _rng.Next(0, 4);
+            int bullets = 3 + _rng.Next(0, 3);
             for (int i = 0; i < bullets; i++) {
                 Bullet bullet = (Bullet)_bulletScene.Instance();
                 bullet._direction = new Vector2(0, 1);
@@ -119,7 +140,7 @@ public class BulletSpawner : Node
                 AddChild(bullet);
             }
         } else {
-            int bullets = 3 + _rng.Next(0, 4);
+            int bullets = 3 + _rng.Next(0, 3);
             for (int i = 0; i < bullets; i++) {
                 Bullet bullet = (Bullet)_bulletScene.Instance();
                 bullet._direction = new Vector2(0, -1);

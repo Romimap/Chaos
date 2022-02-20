@@ -1,9 +1,39 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=16 format=2]
 
 [ext_resource path="res://Scripts/Player.cs" type="Script" id=1]
-[ext_resource path="res://icon.png" type="Texture" id=2]
+[ext_resource path="res://sprite/player.png" type="Texture" id=2]
 [ext_resource path="res://Scripts/BulletSpawner.cs" type="Script" id=3]
-[ext_resource path="res://Scenes/Bullet.tscn" type="PackedScene" id=4]
+[ext_resource path="res://Fonts/alagardFont.tres" type="DynamicFont" id=5]
+[ext_resource path="res://sprite/tileset.tres" type="TileSet" id=6]
+[ext_resource path="res://Scripts/PressKeyStart.cs" type="Script" id=7]
+
+[sub_resource type="Environment" id=2]
+background_mode = 1
+background_color = Color( 0.152941, 0.152941, 0.266667, 1 )
+
+[sub_resource type="AtlasTexture" id=7]
+atlas = ExtResource( 2 )
+region = Rect2( 32, 32, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=5]
+atlas = ExtResource( 2 )
+region = Rect2( 32, 0, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=6]
+atlas = ExtResource( 2 )
+region = Rect2( 0, 32, 32, 32 )
+
+[sub_resource type="AtlasTexture" id=4]
+atlas = ExtResource( 2 )
+region = Rect2( 0, 0, 32, 32 )
+
+[sub_resource type="SpriteFrames" id=8]
+animations = [ {
+"frames": [ SubResource( 7 ), SubResource( 5 ), SubResource( 6 ), SubResource( 4 ) ],
+"loop": false,
+"name": "default",
+"speed": 0.0
+} ]
 
 [sub_resource type="Animation" id=1]
 resource_name = "EndLevelAnimation"
@@ -22,8 +52,124 @@ tracks/0/keys = {
 "method": "StartLevel"
 } ]
 }
+tracks/1/type = "value"
+tracks/1/path = NodePath("../Control/Level:modulate")
+tracks/1/interp = 0
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 1.5, 1.8, 2.1, 2.4, 4.8, 5.1, 5.4, 5.7, 7 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 0 ), Color( 0.286275, 0.301961, 0.494118, 1 ), Color( 0.776471, 0.623529, 0.647059, 1 ), Color( 0.984314, 0.960784, 0.937255, 1 ), Color( 0.984314, 0.960784, 0.937255, 1 ), Color( 0.776471, 0.623529, 0.647059, 1 ), Color( 0.286275, 0.301961, 0.494118, 1 ), Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 0 ) ]
+}
 
-[node name="Root" type="Node"]
+[sub_resource type="Animation" id=3]
+resource_name = "GameOverAnimation"
+length = 7.0
+tracks/0/type = "value"
+tracks/0/path = NodePath("../Control/Level:modulate")
+tracks/0/interp = 0
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.3, 0.6, 0.9, 5.6, 5.9, 6.2, 6.5 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ Color( 1, 1, 1, 0 ), Color( 0.286275, 0.301961, 0.494118, 1 ), Color( 0.776471, 0.623529, 0.647059, 1 ), Color( 0.984314, 0.960784, 0.937255, 1 ), Color( 0.984314, 0.960784, 0.937255, 1 ), Color( 0.776471, 0.623529, 0.647059, 1 ), Color( 0.286275, 0.301961, 0.494118, 1 ), Color( 1, 1, 1, 0 ) ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("../Control/Level:bbcode_text")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ "[center]Game Over" ]
+}
+tracks/2/type = "method"
+tracks/2/path = NodePath("../Control/Press any key")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 7 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "End"
+} ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("../Player/Skin:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( -0.1, 0.5, 2 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 0,
+"values": [ Color( 2.00392, 2.00392, 2.00392, 1 ), Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ) ]
+}
+
+[sub_resource type="Animation" id=9]
+resource_name = "StartGameAnimation"
+length = 7.0
+tracks/0/type = "method"
+tracks/0/path = NodePath(".")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 6 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "StartLevel"
+} ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("../Control/Level:modulate")
+tracks/1/interp = 0
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0, 1.5, 1.8, 2.1, 2.4, 4.8, 5.1, 5.4, 5.7, 7 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 0 ), Color( 0.286275, 0.301961, 0.494118, 1 ), Color( 0.776471, 0.623529, 0.647059, 1 ), Color( 0.984314, 0.960784, 0.937255, 1 ), Color( 0.984314, 0.960784, 0.937255, 1 ), Color( 0.776471, 0.623529, 0.647059, 1 ), Color( 0.286275, 0.301961, 0.494118, 1 ), Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 0 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("../Player/Skin:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 1 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ) ]
+}
+
+[node name="Root" type="WorldEnvironment"]
+environment = SubResource( 2 )
+
+[node name="TileMap" type="TileMap" parent="."]
+position = Vector2( 0, -4 )
+tile_set = ExtResource( 6 )
+cell_size = Vector2( 32, 32 )
+format = 1
+tile_data = PoolIntArray( 1, 0, 0, 2, 0, 3, 3, 0, 3, 4, 0, 3, 5, 0, 3, 6, 0, 3, 7, 0, 3, 8, 0, 4, 65537, 0, 131072, 65538, 0, 65537, 65539, 0, 65538, 65540, 0, 65538, 65541, 0, 65537, 65542, 0, 65539, 65543, 0, 65537, 65544, 0, 65540, 131073, 0, 131072, 131074, 0, 131074, 131075, 0, 131074, 131076, 0, 131074, 131077, 0, 131074, 131078, 0, 131074, 131079, 0, 131074, 131080, 0, 65540, 196609, 0, 131072, 196610, 0, 131074, 196611, 0, 131074, 196612, 0, 131074, 196613, 0, 131074, 196614, 0, 131074, 196615, 0, 131074, 196616, 0, 65540, 262145, 0, 131072, 262146, 0, 131074, 262147, 0, 131074, 262148, 0, 131074, 262149, 0, 131074, 262150, 0, 131074, 262151, 0, 131074, 262152, 0, 65540, 327681, 0, 131072, 327682, 0, 131074, 327683, 0, 131074, 327684, 0, 131074, 327685, 0, 131074, 327686, 0, 131074, 327687, 0, 131074, 327688, 0, 65540, 393217, 0, 196608, 393218, 0, 196609, 393219, 0, 196609, 393220, 0, 196609, 393221, 0, 196609, 393222, 0, 196609, 393223, 0, 196609, 393224, 0, 196612, 458753, 0, 262144, 458754, 0, 262145, 458755, 0, 262145, 458756, 0, 262145, 458757, 0, 262145, 458758, 0, 262145, 458759, 0, 262145, 458760, 0, 262148 )
 
 [node name="Player" type="Node2D" parent="."]
 position = Vector2( 160, 120 )
@@ -32,25 +178,94 @@ _speed = 140.0
 _acceleration = 0.2
 _arenaMinNode = NodePath("../ArenaBounds/ArenaMin")
 _arenaMaxNode = NodePath("../ArenaBounds/ArenaMax")
+_richTextLabelScorePath = NodePath("../Control/Score")
+_skinPath = NodePath("Skin")
 
-[node name="icon" type="Sprite" parent="Player"]
-scale = Vector2( 0.2, 0.2 )
-texture = ExtResource( 2 )
+[node name="Skin" type="AnimatedSprite" parent="Player"]
+modulate = Color( 1, 1, 1, 0 )
+frames = SubResource( 8 )
+
+[node name="Bubble" type="Sprite" parent="Player"]
 
 [node name="ArenaBounds" type="Node2D" parent="."]
 
 [node name="ArenaMin" type="Node2D" parent="ArenaBounds"]
-position = Vector2( 50, 50 )
+position = Vector2( 63, 62 )
 
 [node name="ArenaMax" type="Node2D" parent="ArenaBounds"]
-position = Vector2( 270, 190 )
-
-[node name="Bullet" parent="." instance=ExtResource( 4 )]
+position = Vector2( 257, 221 )
 
 [node name="BulletSpawner" type="Node2D" parent="."]
 script = ExtResource( 3 )
 _arenaMinNode = NodePath("../ArenaBounds/ArenaMin")
 _arenaMaxNode = NodePath("../ArenaBounds/ArenaMax")
+_animationPlayerNode = NodePath("AnimationPlayer")
+_levelRTL = NodePath("../Control/Level")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="BulletSpawner"]
 anims/EndLevelAnimation = SubResource( 1 )
+anims/GameOverAnimation = SubResource( 3 )
+anims/StartGameAnimation = SubResource( 9 )
+
+[node name="Control" type="Control" parent="."]
+margin_right = 320.0
+margin_bottom = 240.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Level" type="RichTextLabel" parent="Control"]
+modulate = Color( 1, 1, 1, 0 )
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -60.0
+margin_top = -20.0
+margin_right = 60.0
+margin_bottom = 20.0
+custom_fonts/normal_font = ExtResource( 5 )
+bbcode_enabled = true
+bbcode_text = "[center]Game Over"
+text = "Game Over"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Score" type="RichTextLabel" parent="Control"]
+modulate = Color( 0.984314, 0.960784, 0.937255, 1 )
+anchor_left = 0.5
+anchor_right = 0.5
+margin_left = -75.0
+margin_top = 6.0
+margin_right = 75.0
+margin_bottom = 46.0
+custom_fonts/normal_font = ExtResource( 5 )
+bbcode_enabled = true
+bbcode_text = "[center]01:56"
+text = "01:56"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Press any key" type="RichTextLabel" parent="Control"]
+modulate = Color( 0.984314, 0.960784, 0.937255, 1 )
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -75.0
+margin_top = 45.0
+margin_right = 75.0
+margin_bottom = 85.0
+custom_fonts/normal_font = ExtResource( 5 )
+bbcode_enabled = true
+bbcode_text = "[center]Press any key to start"
+text = "Press any key to start"
+script = ExtResource( 7 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2( 159, 120 )
